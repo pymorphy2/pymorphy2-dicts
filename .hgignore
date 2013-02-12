@@ -1,0 +1,19 @@
+#projects
+\.idea
+
+#temp files
+\.pyc
+\.orig
+
+#os files
+\.DS_Store
+Thumbs.db
+
+#project-specific files
+\.tox
+stuff
+MANIFEST$
+^pymorphy2_dicts/data
+^build
+^dict.xml
+^dist
