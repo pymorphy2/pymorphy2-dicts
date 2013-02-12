@@ -2,22 +2,24 @@ pymorphy2-dicts
 ===============
 
 This is a package with pre-compiled OpenCorpora.org dictionary
-data for pymorphy2 (https://github.com/kmike/pymorphy2).
+data for `pymorphy2`_.
+
+.. _pymorphy2: https://github.com/kmike/pymorphy2
 
 Installation
 ------------
 
 Install::
 
-    $ pip install pymorphy2-data
+    $ pip install pymorphy2-dicts
 
 Update::
 
-    $ pip install --update 'pymorphy2-data < 2.0'
+    $ pip install --update 'pymorphy2-dicts < 2.0'
 
 Remove::
 
-    $ pip uninstall pymorphy2-data
+    $ pip uninstall pymorphy2-dicts
 
 Usage
 -----
