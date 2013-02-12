@@ -3,6 +3,9 @@
 
 """
 Script for updating dictionary data.
+
+Please note that it is resource-heavy: it requires > 3Gb free RAM and about
+500M on HDD for temporary files.
 """
 
 from __future__ import absolute_import, unicode_literals
