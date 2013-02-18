@@ -13,10 +13,6 @@ Install::
 
     $ pip install pymorphy2-dicts
 
-Update::
-
-    $ pip install --update 'pymorphy2-dicts < 2.0'
-
 Remove::
 
     $ pip uninstall pymorphy2-dicts
