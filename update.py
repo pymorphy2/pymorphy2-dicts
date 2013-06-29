@@ -41,7 +41,13 @@ def write_version():
 
 
 if __name__ == '__main__':
-    logger.setLevel(logging.DEBUG)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(levelname)-6s %(asctime)s  %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
 
     start = datetime.datetime.now()
     rebuild_dictionary()
