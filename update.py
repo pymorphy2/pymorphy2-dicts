@@ -13,6 +13,7 @@ import logging
 import os
 import datetime
 import shutil
+import sys
 
 from pymorphy2 import opencorpora_dict
 from pymorphy2.cli import download_xml, compile_dict, logger, show_dict_meta
@@ -24,11 +25,13 @@ OUT_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'data')
 XML_NAME = os.path.join(ROOT, 'dict.xml')
 VERSION_FILE_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'version.py')
 
-def rebuild_dictionary():
-    download_xml(XML_NAME, True)
+def rebuild_dictionary(download=True, unlink=True):
+    if download or not os.path.exists(XML_NAME):
+        download_xml(XML_NAME, True)
     shutil.rmtree(OUT_PATH)
     compile_dict(XML_NAME, OUT_PATH)
-    os.unlink(XML_NAME)
+    if unlink:
+        os.unlink(XML_NAME)
 
 def write_version():
     dct = opencorpora_dict.load(OUT_PATH)
@@ -50,7 +53,9 @@ if __name__ == '__main__':
         logger.removeHandler(handler)
 
     start = datetime.datetime.now()
-    rebuild_dictionary()
+
+    download = not '--no-download' in sys.argv
+    rebuild_dictionary(download=download, unlink=download)
 
     print('-'*20)
     print("Done in %s\n" % (datetime.datetime.now() - start))
