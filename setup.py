@@ -3,7 +3,7 @@ from distutils.core import setup
 
 def get_version():
     with open("pymorphy2_dicts/version.py", "rt") as f:
-        return f.readline().split("=")[1].strip(' "')
+        return f.readline().split("=")[1].strip(' "\n')
 
 setup(
     name = 'pymorphy2-dicts',

@@ -4,16 +4,18 @@
 """
 Script for updating pymorphy2 dictionary data.
 
-Please note that it is resource-heavy: it requires > 3Gb free RAM and about
-500M on HDD for temporary files.
+Please note that it is resource-heavy: it requires > 3GB free RAM and about
+1GB on HDD for temporary files.
 
 Usage:
-    update.py [--no-download] [--no-unlink]
+    update.py [--no-download] [--no-unlink] [--no-dict] [--no-prob]
     update.py -h | --help
 
 Options:
-    --no-download   Don't download dict.xml from opencorpora.org and and don't unlink it after processing
-    --no-unlink     Don't unlink dict.xml after processing
+    --no-download   Don't download XML files from opencorpora.org and and don't unlink them after processing
+    --no-unlink     Don't unlink XML files after processing
+    --no-dict       Don't compile fictionary
+    --no-prob       Don't update P(t|w) estimates
 
 """
 
@@ -25,23 +27,34 @@ import shutil
 
 from pymorphy2.vendor.docopt import docopt
 from pymorphy2 import opencorpora_dict
-from pymorphy2.cli import download_xml, compile_dict, logger, show_dict_meta
+from pymorphy2 import cli
 from pymorphy2.opencorpora_dict.storage import CURRENT_FORMAT_VERSION
 
 ROOT = os.path.dirname(__file__)
 
 OUT_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'data')
-XML_NAME = os.path.join(ROOT, 'dict.xml')
+DICT_XML = os.path.join(ROOT, 'dict.xml')
+CORPUS_XML = os.path.join(ROOT, 'annot.corpus.xml')
 VERSION_FILE_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'version.py')
 
+
 def rebuild_dictionary(download=True, unlink=True):
-    logger.info("download: %s, unlink: %s", download, unlink)
-    if download or not os.path.exists(XML_NAME):
-        download_xml(XML_NAME, True)
+    cli.logger.info("download: %s, unlink: %s", download, unlink)
+    if download or not os.path.exists(DICT_XML):
+        cli.download_dict_xml(DICT_XML, True)
     shutil.rmtree(OUT_PATH)
-    compile_dict(XML_NAME, OUT_PATH)
+    cli.compile_dict(DICT_XML, OUT_PATH)
     if unlink:
-        os.unlink(XML_NAME)
+        os.unlink(DICT_XML)
+
+
+def reestimate_cpd(download=True, unlink=True):
+    if download or not os.path.exists(CORPUS_XML):
+        cli.download_corpus_xml(CORPUS_XML)
+    cli.estimate_tag_cpd(CORPUS_XML, OUT_PATH, 1)
+    if unlink:
+        os.unlink(CORPUS_XML)
+
 
 def write_version():
     dct = opencorpora_dict.load(OUT_PATH)
@@ -61,18 +74,22 @@ if __name__ == '__main__':
         format='%(levelname)-6s %(asctime)s  %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
     )
-    for handler in logger.handlers:
-        logger.removeHandler(handler)
+    for handler in cli.logger.handlers:
+        cli.logger.removeHandler(handler)
 
     args = docopt(__doc__)
-    rebuild_dictionary(
-        download = not args['--no-download'],
-        unlink = not (args['--no-unlink'] or args['--no-download'])
-    )
+    should_download = not args['--no-download']
+    should_unlink = not (args['--no-unlink'] or args['--no-download'])
+
+    if not args['--no-dict']:
+        rebuild_dictionary(download=should_download, unlink=should_unlink)
+
+    if not args['--no-prob']:
+        reestimate_cpd(download=should_download, unlink=should_unlink)
 
     print('-'*20)
     print("Done in %s\n" % (datetime.datetime.now() - start))
 
     write_version()
-    show_dict_meta(OUT_PATH)
+    cli.show_dict_meta(OUT_PATH)
 
