@@ -25,6 +25,7 @@ import os
 import datetime
 import shutil
 
+import opencorpora
 from pymorphy2.vendor.docopt import docopt
 from pymorphy2 import opencorpora_dict
 from pymorphy2 import cli
@@ -52,18 +53,24 @@ def reestimate_cpd(download=True, unlink=True):
     if download or not os.path.exists(CORPUS_XML):
         cli.download_corpus_xml(CORPUS_XML)
     cli.estimate_tag_cpd(CORPUS_XML, OUT_PATH, 1)
+    rev = _get_corpus_revision(CORPUS_XML)
     if unlink:
         os.unlink(CORPUS_XML)
+    return rev
 
 
-def write_version():
-    dct = opencorpora_dict.load(OUT_PATH)
-    contents = '__version__ = "{format_version}.{source_revision}"'.format(
-        format_version=CURRENT_FORMAT_VERSION,
-        source_revision=dct.meta['source_revision']
+def write_version(format_version, dict_revision, corpus_revision):
+    contents = '__version__ = "{format_version}.{dict_revision}x{corpus_revision}"'.format(
+        format_version=format_version,
+        dict_revision=dict_revision,
+        corpus_revision=corpus_revision,
     )
     with open(VERSION_FILE_PATH, 'wb') as f:
         f.write(contents.encode('utf8'))
+
+
+def _get_corpus_revision(path):
+    return opencorpora.CorpusReader(path).get_annotation_info()['revision']
 
 
 if __name__ == '__main__':
@@ -82,14 +89,21 @@ if __name__ == '__main__':
     should_unlink = not (args['--no-unlink'] or args['--no-download'])
 
     if not args['--no-dict']:
-        rebuild_dictionary(download=should_download, unlink=should_unlink)
+        rebuild_dictionary(should_download, should_unlink)
 
+    corpus_rev = None
     if not args['--no-prob']:
-        reestimate_cpd(download=should_download, unlink=should_unlink)
+        corpus_rev = reestimate_cpd(should_download, should_unlink)
+    if corpus_rev is None:
+        corpus_rev = _get_corpus_revision(CORPUS_XML)
 
-    print('-'*20)
+    print('-' * 20)
     print("Done in %s\n" % (datetime.datetime.now() - start))
 
-    write_version()
+    write_version(
+        CURRENT_FORMAT_VERSION,
+        opencorpora_dict.load(OUT_PATH).meta['source_revision'],
+        corpus_rev,
+    )
     cli.show_dict_meta(OUT_PATH)
 
