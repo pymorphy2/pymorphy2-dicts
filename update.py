@@ -60,7 +60,7 @@ def reestimate_cpd(download=True, unlink=True):
 
 
 def write_version(format_version, dict_revision, corpus_revision):
-    contents = '__version__ = "{format_version}.{dict_revision}x{corpus_revision}"'.format(
+    contents = '__version__ = "{format_version}.{dict_revision}.{corpus_revision}"'.format(
         format_version=format_version,
         dict_revision=dict_revision,
         corpus_revision=corpus_revision,
