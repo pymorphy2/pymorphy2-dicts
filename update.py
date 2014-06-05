@@ -26,7 +26,8 @@ import datetime
 import shutil
 
 import opencorpora
-from pymorphy2.vendor.docopt import docopt
+from docopt import docopt
+
 from pymorphy2 import opencorpora_dict
 from pymorphy2 import cli
 from pymorphy2.opencorpora_dict.storage import CURRENT_FORMAT_VERSION

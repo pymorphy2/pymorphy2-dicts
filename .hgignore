@@ -16,5 +16,6 @@ MANIFEST$
 ^pymorphy2_dicts/data
 ^pymorphy2_dicts/version.py
 ^build
+.egg-info
 ^dict.xml
 ^dist
