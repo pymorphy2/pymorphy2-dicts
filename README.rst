@@ -39,8 +39,6 @@ The main repo is https://github.com/kmike/pymorphy2-dicts/. The repository
 doesn't contain the data itself: only package template and update
 scripts are stored in VCS.
 
-There is a hg/bitbucket mirror at https://bitbucket.org/kmike/pymorphy2-dicts/.
-
 License for Python code in this package is MIT. The data
 is licensed under `Creative Commons Attribution-Share Alike`_.
 
