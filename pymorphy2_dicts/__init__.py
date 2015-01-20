@@ -4,7 +4,5 @@ import os
 from .version import __version__
 
 def get_path():
-    """
-    Return path to dictionary.
-    """
+    """ Return path to the dictionary. """
     return os.path.join(os.path.dirname(__file__), 'data')
