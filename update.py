@@ -131,9 +131,6 @@ if __name__ == '__main__':
         format='%(levelname)-6s %(asctime)s  %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
     )
-    for handler in cli.logger.handlers:
-        cli.logger.removeHandler(handler)
-
     args = docopt(__doc__)
 
     if args['ru']:
