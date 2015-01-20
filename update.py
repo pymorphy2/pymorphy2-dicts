@@ -40,10 +40,10 @@ from pymorphy2.opencorpora_dict.storage import CURRENT_FORMAT_VERSION
 
 
 ROOT = os.path.dirname(__file__)
-OUT_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'data')
+OUT_PATH = os.path.join(ROOT, 'pymorphy2-dicts', 'pymorphy2_dicts', 'data')
+VERSION_FILE_PATH = os.path.join(ROOT, 'pymorphy2-dicts', 'pymorphy2_dicts', 'version.py')
 DICT_XML = os.path.join(ROOT, 'dict.xml')
 CORPUS_XML = os.path.join(ROOT, 'annot.corpus.xml')
-VERSION_FILE_PATH = os.path.join(ROOT, 'pymorphy2_dicts', 'version.py')
 
 OPENCORPORA_XML_BZ2_URL = "http://opencorpora.org/files/export/dict/dict.opcorpora.xml.bz2"
 
