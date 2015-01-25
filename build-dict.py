@@ -88,7 +88,7 @@ if __name__ == '__main__':
         opencorpora_dict_path=dict_xml,
         out_path=out_path,
         source_name=args['--source-name'],
-        prediction_options=prediction_options,
+        compile_options=prediction_options,
     )
 
     if args["--corpus"]:
