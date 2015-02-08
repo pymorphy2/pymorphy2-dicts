@@ -9,7 +9,7 @@ Usage:
     build-dict.py -h | --help
 
 Options:
-    --lang <lang>                     Language constants to use [default: ru]
+    --lang <lang>                     Language constants to use. Allowed values are "ru" and "uk" [default: ru]
     --corpus <corpus.xml>             Path to an XML file with a corpus in OpenCorpora format used to estimate P(tag|word).
     --source-name <name>              Name of the source to put into dict meta [default: opencorpora.org]
     --clear                           Remove all files from <out-path>
@@ -28,16 +28,14 @@ import sys
 import os
 import shutil
 import logging
-import datetime
 
 import opencorpora
 from docopt import docopt
 
+import pymorphy2.lang
 from pymorphy2 import opencorpora_dict
 from pymorphy2.opencorpora_dict.probability import add_conditional_tag_probability
 from pymorphy2.opencorpora_dict.storage import update_meta
-from pymorphy2.opencorpora_dict.storage import CURRENT_FORMAT_VERSION
-from pymorphy2.constants import LANG_PARADIGM_PREFIXES
 
 
 logger = logging.getLogger('pymorphy2')
@@ -69,10 +67,15 @@ if __name__ == '__main__':
     )
 
     args = docopt(__doc__)
-    # print(args)
 
     dict_xml = args['<dict.xml>']
     out_path = args['<out-folder>']
+
+    try:
+        lang = getattr(pymorphy2.lang, args['--lang'])
+    except AttributeError:
+        print("Unknown language code: %r" % args['--lang'])
+        sys.exit(1)
 
     if os.path.exists(out_path):
         if args['--clear']:
@@ -85,12 +88,13 @@ if __name__ == '__main__':
         (key.replace('-', '_'), int(args['--' + key]))
         for key in ('min-ending-freq', 'min-paradigm-popularity', 'max-suffix-length')
     )
-    compile_options["paradigm_prefixes"] = LANG_PARADIGM_PREFIXES[args["--lang"]]
+    compile_options["paradigm_prefixes"] = lang.PARADIGM_PREFIXES
 
     opencorpora_dict.convert_to_pymorphy2(
         opencorpora_dict_path=dict_xml,
         out_path=out_path,
         source_name=args['--source-name'],
+        language_code=args['--lang'],
         compile_options=compile_options,
     )
 
