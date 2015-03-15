@@ -4,6 +4,7 @@
 #temp files
 *.pyc
 *.orig
+*.ipynb_checkpoints
 
 #os files
 .DS_Store
@@ -12,11 +13,11 @@ Thumbs.db
 #project-specific files
 .tox/
 stuff/
+*.ipynb
+*.xml
 MANIFEST$
-pymorphy2-dicts/pymorphy2_dicts/data
-pymorphy2-dicts/pymorphy2_dicts/version.py
-pymorphy2-dicts/build/
+compiled-dicts
+pymorphy2-dicts-*
 *.egg-info
-dict.xml
+dict.opcorpora.xml
 annot.corpus.xml
-pymorphy2-dicts/dist/

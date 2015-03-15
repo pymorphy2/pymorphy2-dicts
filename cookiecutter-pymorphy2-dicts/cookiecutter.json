@@ -1,0 +1,11 @@
+{
+  "author": "Mikhail Korobov",
+  "author_email": "kmike84@gmail.com",
+  "version": "dev",
+  "lang": "ru",
+  "lang_full": "Russian",
+  "distribution_name": "pymorphy2-dicts-{{ cookiecutter.lang }}",
+  "package_name": "pymorphy2_dicts_{{ cookiecutter.lang }}",
+  "data_license": "`Creative Commons Attribution-Share Alike <http://creativecommons.org/licenses/by-sa/3.0/>`_",
+  "dev_status": "4 - Beta"
+}

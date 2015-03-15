@@ -1,0 +1,10 @@
+pymorphy2
+opencorpora-tools==0.4.4
+lxml
+docopt==0.6.2
+tqdm
+dawg >= 0.7.7
+nltk > 3.0.0
+cookiecutter >= 0.9
+wheel
+setuptools
