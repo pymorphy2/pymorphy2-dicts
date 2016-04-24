@@ -14,6 +14,7 @@ Usage:
 """
 from __future__ import print_function
 import os
+import time
 import shutil
 import subprocess
 
@@ -57,7 +58,7 @@ class RussianBuilder(object):
         cookiecutter("cookiecutter-pymorphy2-dicts", no_input=True, extra_context={
             'lang': 'ru',
             'lang_full': 'Russian',
-            'version': get_version(),
+            'version': get_version(corpus=True, timestamp=False),
         })
 
     def cleanup(self):
@@ -86,7 +87,7 @@ class UkrainianBuilder(object):
         cookiecutter("cookiecutter-pymorphy2-dicts", no_input=True, extra_context={
             'lang': 'uk',
             'lang_full': 'Ukrainian',
-            'version': get_version(corpus=False),
+            'version': get_version(corpus=False, timestamp=True),
         })
 
     def cleanup(self):
@@ -95,12 +96,14 @@ class UkrainianBuilder(object):
             os.unlink(RU_DICT_XML)
 
 
-def get_version(corpus=False):
+def get_version(corpus=False, timestamp=False):
     meta = dict(opencorpora_dict.load(OUT_PATH).meta)
     if corpus:
         tpl = "{format_version}.{source_revision}.{corpus_revision}"
     else:
         tpl = "{format_version}.{source_revision}.1"
+    if timestamp:
+        tpl += ".%s" % (int(time.time()))
     return tpl.format(**meta)
 
 
