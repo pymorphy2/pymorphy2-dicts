@@ -1,5 +1,5 @@
 {{ cookiecutter.distribution_name }}
-=======================================
+==========================================================
 
 {{ cookiecutter.lang_full }} dictionaries for `pymorphy2`_.
 
