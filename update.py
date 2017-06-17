@@ -55,11 +55,16 @@ class RussianBuilder(object):
 
     def package(self):
         print("Creating Python package")
-        cookiecutter("cookiecutter-pymorphy2-dicts", no_input=True, extra_context={
-            'lang': 'ru',
-            'lang_full': 'Russian',
-            'version': get_version(corpus=True, timestamp=False),
-        })
+        cookiecutter(
+            template="cookiecutter-pymorphy2-dicts",
+            no_input=True,
+            overwrite_if_exists=True,
+            extra_context={
+                'lang': 'ru',
+                'lang_full': 'Russian',
+                'version': get_version(corpus=True, timestamp=False),
+            }
+        )
 
     def cleanup(self):
         shutil.rmtree(OUT_PATH, ignore_errors=True)
