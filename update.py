@@ -36,13 +36,16 @@ UK_DICT_XML = "full-uk.xml"
 def _download_bz2(url, out_name):
     subprocess.check_call("curl --progress-bar '%s' | bunzip2 > '%s'" % (url, out_name), shell=True)
 
+def _download_corpus_xml(url, out_name):
+    subprocess.check_call("curl --progress-bar '%s' | bunzip2 | sed 's/^  //' > '%s'" % (url, out_name), shell=True)
+
 
 class RussianBuilder(object):
     def download(self):
         print("Downloading OpenCorpora dictionary...")
         _download_bz2(RU_DICT_URL, RU_DICT_XML)
         print("Downloading OpenCorpora corpus...")
-        _download_bz2(RU_CORPORA_URL, RU_CORPORA_XML)
+        _download_corpus_xml(RU_CORPORA_URL, RU_CORPORA_XML)
         print("")
 
     def compile(self):
